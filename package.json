@@ -1,0 +1,20 @@
+{
+  "name": "playwright-otp-example",
+  "version": "1.0.0",
+  "description": "An example of OTP authentication using Playwright.",
+  "scripts": {
+    "test": "playwright test",
+    "dev": "playwright test --headed",
+    "debug": "playwright test --headed --debug"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "@types/node": "^20.12.3",
+    "dotenv": "^16.4.5",
+    "otpauth": "^9.2.2"
+  },
+  "dependencies": {}
+}
