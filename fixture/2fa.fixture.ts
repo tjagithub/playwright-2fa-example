@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test'
 import OTPAuth from 'otpauth'
 
-export const totpTest = test.extend({
+export const otpTest = test.extend({
   page: async ({ page }, use) => {
     expect(process.env.GITHUB_USER).toBeDefined()
     expect(process.env.GITHUB_PWD).toBeDefined()
     expect(process.env.GITHUB_TOTP_SECRET).toBeDefined()
-    let totp = new OTPAuth.TOTP({
+    let otp = new OTPAuth.TOTP({
       issuer: "GitHub",
       label: "USERNAME",
       algorithm: "SHA1",
@@ -25,7 +25,8 @@ export const totpTest = test.extend({
     await page.getByRole("button", { name: "Sign in", exact: true }).click()
     await page.getByRole('link', { name: 'Use your authenticator app' }).click()
     await page.getByPlaceholder("XXXXXX").click()
-    await page.getByPlaceholder("XXXXXX").fill(totp.generate())
+    await page.getByPlaceholder("XXXXXX").fill(otp.generate())
+    await page.waitForURL("https://github.com")
 
     use(page)
   }

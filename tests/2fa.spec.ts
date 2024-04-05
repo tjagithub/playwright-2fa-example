@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { totpTest } from '@fixture/2fa.fixture'
+import { otpTest } from '@fixture/2fa.fixture'
 import OTPAuth from 'otpauth'
 import 'dotenv/config'
 
@@ -29,8 +29,10 @@ test('invalid auth token fails', async ({ page }) => {
   const failedAuthentication = await page.getByText('Two-factor authentication failed.').first()
   await expect(failedAuthentication).toHaveText('Two-factor authentication failed.')
 })
-
-test('valid auth token passes', async ({ page }, testinfo) => {
+/**
+ * This test is skipped because the 2fa fixture will use the same code as this test
+ */
+test.skip('valid auth token passes', async ({ page }, testinfo) => {
   expect(process.env.GITHUB_USER).toBeDefined()
   expect(process.env.GITHUB_PWD).toBeDefined()
   expect(process.env.GITHUB_TOTP_SECRET).toBeDefined()
@@ -54,6 +56,7 @@ test('valid auth token passes', async ({ page }, testinfo) => {
   await page.getByRole('link', { name: 'Use your authenticator app' }).click()
   await page.getByPlaceholder("XXXXXX").click()
   await page.getByPlaceholder("XXXXXX").fill(totp.generate())
+  await page.waitForURL('https://github.com')
   await expect(page).toHaveURL("https://github.com")
   await testinfo.attach("home", { body: await page.screenshot(), contentType: "image/png" })
 })
@@ -61,7 +64,7 @@ test('valid auth token passes', async ({ page }, testinfo) => {
 /**
  * This test uses a test fixture, abstracting away the boilerplate 
  */
-totpTest('valid auth token passes using fixture', async ({ page }, testinfo) => {
+otpTest('valid auth token passes using fixture', async ({ page }, testinfo) => {
   await expect(page).toHaveURL("https://github.com")
   await testinfo.attach("home", { body: await page.screenshot(), contentType: "image/png" })
 })
